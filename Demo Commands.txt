@@ -1,0 +1,120 @@
+﻿Demo 1
+
+
+docker container run ubuntu
+
+
+docker container run -it ubuntu /bin/bash
+
+
+cat /etc/*release
+
+
+docker container list -al
+
+
+docker container run -it ubuntu:16.04 /bin/bash
+
+
+
+
+
+
+Demo 2 - Dockerfiles
+
+
+FROM ubuntu:16.04
+
+
+RUN mkdir /home/adug \
+   && touch /home/adug/hello \
+   && echo "hello melbourne" > /home/adug/hello \
+   && touch /home/adug/anotherfile
+
+
+
+
+
+
+FROM adug/basic
+
+
+RUN echo "hello canberra" > /home/adug/hello \
+   && touch /home/adug/secondfile
+
+
+
+
+Demo 3 - Volumes
+
+
+docker container run -v ~/adugdocker2/localvolume:/home/adug/common -it adug/lessbasic /bin/bash
+
+
+
+
+
+
+Demo 4 - Ports
+
+
+docker container run -p 8086:80 -v "$PWD"/webroot:/var/www -dit clover/apache
+
+
+docker container logs 7417fee2c2f1 -f
+
+
+
+
+docker container exec -it 65aebb1d2f62 /bin/bash
+
+
+docker container stop 7417fee2c2f1
+
+
+
+
+Demo 5 - Databases
+
+
+docker container run -e MYSQL_ROOT_PASSWORD=rootpw -e MYSQL_DATABASE=sakila -p 3307:3306 -v "$PWD"/dbmysql/sakila-db:/docker-entrypoint-initdb.d -d mysql:5.7
+
+
+docker container logs fc200862fd88 -f
+
+
+
+
+docker container run -e MYSQL_ROOT_PASSWORD=rootpw -e MYSQL_DATABASE=sakila -p 3307:3306 -v "$PWD"/dbmysql/sakila-db:/docker-entrypoint-initdb.d -d mysql:latest
+
+
+
+
+docker container run -e POST_PASSWORD=rootpw -e POSTGRES_DB=sakila -p 5432:5432 -v "$PWD"/dbpostgres/pagila-0.10.1:/docker-entrypoint-initdb.d -d postgres:latest
+
+
+
+
+
+
+Demo 6 - PAServer
+
+
+docker image build -t codepartners/paserver:20 paserver/
+
+
+docker container run -p 64211:64211 -it codepartners/paserver:20
+
+
+
+
+
+
+
+
+
+
+Demo 7 - WebBroker
+
+
+docker container run -p 8086:80 -v "$PWD"/webbrokermodule/Linux64/Debug:/etc/apache2/mods-custom -it codepartners/apache
